@@ -1,0 +1,14 @@
+<h1>Your Orders</h1>
+
+<section class="grid-container">
+  <% @orders.each do |order| %>
+    <section class="grid-item" id="order-<%= order.id %>">
+      <h4><%= link_to "Order ID: #{order.id}", "/profile/orders/#{order.id}" %></h4>
+      <p>Created At: <%= order.created_at %></p>
+      <p>Last Updated: <%= order.updated_at %></p>
+      <p>Total Items: <%= order.quantity_ordered %></p>
+      <p>Total Price: <%= number_to_currency(order.grandtotal/100.to_f) %></p>
+      <h4>Order Status: <%= order.status.capitalize %></h4>
+    </section>
+  <% end %>
+</section>

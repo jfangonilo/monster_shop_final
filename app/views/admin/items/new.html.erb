@@ -1,0 +1,5 @@
+<h1>New Item for <%= @merchant.name %></h1>
+
+<%= form_for [:admin, @merchant, @item], url: admin_dash_merchant_items_path(@merchant) do |form| %>
+  <%= render partial: '/items/form', locals: { f: form } %>
+<% end %>

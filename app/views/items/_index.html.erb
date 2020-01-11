@@ -1,0 +1,53 @@
+<% if @merchant %>
+  <h1><%= link_to @merchant.name, "/merchants/#{@merchant.id}"%><span> Items</span></h1>
+  <p align="center"><%= link_to "Add New Item", new_merchant_dash_item_path if current_employee?(@merchant) %></p>
+  <p align="center"><%= link_to "Add New Item", "/admin/merchants/#{@merchant.id}/items/new" if current_admin_user? %></p>
+<% else %>
+  <h1>All Items</h1>
+<% end %>
+  <% @items.reload %>
+
+<section class="grid-container">
+  <% @items.each do |item| %>
+    <section class = "grid-item" id= 'item-<%=item.id%>'>
+      <h2> <%=link_to item.name, "/items/#{item.id}" %> </h2>
+      <p>Sold by: <%=link_to item.merchant.name, "/merchants/#{item.merchant.id}" %></p>
+      <%= link_to image_tag(item.image), "/items/#{item.id}", id: "#{item.id}-image" %>
+      <p> <%= item.description unless @merchant%> </p>
+      <p>Price: <%=number_to_currency(item.price/100.to_f) %> </p>
+      <p>Inventory: <%= item.inventory %> </p>
+      <% if current_employee?(item.merchant) || current_admin_user? %>
+        <% if item.active? %>
+          <%= link_to "Deactivate", "/merchant/items/#{item.id}/toggle_active", method: :patch if current_merchant_user? %>
+          <%= link_to "Deactivate", "/admin/items/#{item.id}/toggle_active", method: :patch if current_admin_user? %>
+        <% else %>
+          <%= link_to "Activate", "/merchant/items/#{item.id}/toggle_active", method: :patch if current_merchant_user? %>
+          <%= link_to "Activate", "/admin/items/#{item.id}/toggle_active", method: :patch if current_admin_user? %>
+        <% end %>
+        <p><%= link_to "Delete Item", merchant_dash_item_path(item), method: :delete if item.no_orders? %></p>
+        <p><%= link_to "Edit Item", edit_merchant_dash_item_path(item) if current_merchant_user? %> </p>
+        <p><%= link_to "Edit Item", "/admin/merchants/#{item.merchant_id}/items/#{item.id}/edit" if current_admin_user? %> </p>
+      <% end %>
+    </section>
+  <% end %>
+</section>
+
+<h2>Most Popular Items </h2>
+<section class="grid-container" id="top_five">
+  <% @items.by_popularity(5, "DESC").each do |item| %>
+    <section class="grid-item">
+      <p>Item Name: <%=link_to item.name, "/items/#{item.id}" %></p>
+      <p>Quantity: <%= item.quantity %></p>
+    </section>
+  <%end %>
+</section>
+
+<h2>Least Popular Items</h2>
+<section class="grid-container" id= "bottom_five">
+  <% @items.by_popularity(5, "ASC").each do |item| %>
+    <section class="grid-item">
+      <p>Item Name: <%=link_to item.name, "/items/#{item.id}" %></p>
+      <p>Quantity: <%= item.quantity %></p>
+    </section>
+  <%end %>
+</section>

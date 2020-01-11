@@ -1,0 +1,16 @@
+<h2><%= @merchant.name %></h2>
+<p><%= @merchant.address %> <%= @merchant.city %>, <%= @merchant.state %> <%= @merchant.zip %></p>
+<p><%= link_to "All #{@merchant.name} Items", "/merchant/items" unless current_admin_user? %></p>
+<p><%= link_to "All #{@merchant.name} Items", "/admin/merchants/#{@merchant.id}/items" if current_admin_user? %></p>
+<p><%= link_to "Update Merchant", "/merchants/#{@merchant.id}/edit" %></p>
+<section class="grid-container">
+  <% @merchant.pending_orders.each do | order |%>
+  <section class = "grid-item" id='order-<%= order.id%>'>
+    <p><%= link_to "Order ID: #{order.id}", "/merchant/orders/#{order.id}" if current_merchant_user? %></p>
+    <p><%= link_to "Order ID: #{order.id}", "/admin/users/#{order.user_id}/orders/#{order.id}" if current_admin_user? %></p>
+    <p>Date Created: <%= order.created_at %></p>
+    <p>Number of Items In Order: <%= order.quantity_ordered_from(@merchant) %></p>
+    <p>Order Total: <%= number_to_currency(order.subtotal_from(@merchant)/100.to_f) %></p>
+  </section>
+  <% end %>
+</section>

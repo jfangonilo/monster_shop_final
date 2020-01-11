@@ -1,0 +1,9 @@
+
+
+<center>
+<%= form_for [:admin, user], url: "/admin/users/#{user.id}/role", :html => { :style => 'background-color: #17BEBB;' } do |f| %>
+  <%= f.label :role%>
+  <%= f.select :role, ['user', 'merchant_employee', 'merchant_admin', 'admin_user']%>
+  <%= f.submit %>
+<% end %>
+</center>

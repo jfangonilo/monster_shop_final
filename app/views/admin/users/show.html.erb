@@ -1,0 +1,8 @@
+<h1>Admin View</h1>
+
+<h2><%= @display_user.name %></h2>
+<p><%= @display_user.email %></p>
+<p><%= @display_user.address %></p>
+<p><%= @display_user.city %>, <%= @display_user.state %> <%= @display_user.zip %></p>
+<p><%= link_to "Edit #{@display_user.name} information.", "/admin/users/#{@display_user.id}/edit" %></p>
+<p><%= link_to "Edit #{@display_user.name} password.", "/admin/users/#{@display_user.id}/edit_password" %></p>

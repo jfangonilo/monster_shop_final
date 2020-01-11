@@ -1,0 +1,5 @@
+<h1>Edit <%= @item.name %></h1>
+
+<%= form_for [@merchant, @item], url: "/admin/merchants/#{@merchant.id}/items/#{@item.id}" do |form| %>
+  <%= render partial: '/items/form', locals: { f: form } %>
+<% end %>
