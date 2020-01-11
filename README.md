@@ -1,53 +1,112 @@
-### Monster Shop - Turing Back End Engineering, Module 2, Group Project
+# Monster Shop Extensions
 
-Heroku App: https://jbrw-monstershop.herokuapp.com/
-Schema Design: https://ondras.zarovi.cz/sql/demo/?keyword=default
 
-Collaborators:
-Becky Robran: https://github.com/rer7891
+## Instructions
 
-Jomah Fangonilo: https://github.com/jfangonilo
+* Fork this repository or use your existing project.
+* Clone your fork if you have forked.
+* When you are finished, push your code to your fork. (if you have forked)
 
-Ray Nguyen: https://github.com/itemniner
+## Coupon Codes
 
-Wren Steitle: https://github.com/wrenisit
+#### General Goals
 
-### Overview:
-Monster Shop is a fictional ecommerce website that allows you to browse through merchants and their items, add goods to your cart, and check out.
+Merchant users can generate coupon codes within the system.
 
-As a user, you have the ability to peruse the website without logging in, and add items to your cart. When you are ready to check out, you are required to register or log in to your profile. Once you have a profile, you have the ability to check out, change your password, change your personal information, view orders, or continue shopping.
+#### Completion Criteria
 
-As a merchant, you have two different roles, merchant employee or merchant admin. A merchant employee can fulfill orders, create items, delete items, and view orders placed for that merchant. As a merchant admin, you have the same functionality, and you also have the ability to edit the merchant data.
+1. Merchant users have a link on their dashboard to manage their coupons.
+1. Merchant users have full CRUD functionality over their coupons with exceptions mentioned below:
+   - merchant users cannot delete a coupon that has been used in an order
+   - Note: Coupons cannot be for greater than 100% off.
 
-As an administrator, you have admin only views of merchant pages and user pages, except password edit. An admin can also fulfill and ship orders on behalf of a merchant. An admin has the ability to activate and deactivate merchants and users, as well as change the role of a user.
+1. A coupon will have a coupon name, a coupon code, and a percent-off value. The name and coupon code must be unique in the whole database. 
+1. Users need a way to add a coupon code when checking out. Only one coupon may be used per order.
+1. A coupon code from a merchant only applies to items sold by that merchant.
 
-### Cart:
-As a visitor you can visit merchant pages and add items to your cart. You can update the item quantity in your cart with a Add Item/Subtract Item button by each item. You cannot checkout an order as a visitor.
 
-As a logged in regular user you can add items to your cart and check out. Once you check out an order is created and any merchant that has items in your order will receive a copy of that order with their items to fulfill. Once an order's items are all fulfilled the status of that order goes from pending to packaged. At this point a user can no longer cancel an order.
+#### Implementation Guidelines
 
-Once an order is pending an admin can ship that order and the status of that order is updated shipped.
+1. If a user adds a coupon code, they can continue shopping. The coupon code is still remembered when returning to the cart page. (This information should not be stored in the database until after checkout. )
+1. The cart show page should calculate subtotals and the grand total as usual, but also show a "discounted total".
+1. Users can enter different coupon codes until they finish checking out, then the last code entered before clicking checkout is final.
+1. Order show pages should display which coupon was used, as well as the discounted price.
 
-If a user logs out with items in their cart those items are deleted.
+#### Extensions
+1. Coupons can be used by multiple users, but may only be used one time per user.
+1. Merchant users can enable/disable coupon codes
+1. Merchant users can have a maximum of 5 coupons in the system
 
-Personal Wins:
-Becky: Becoming more comfortable with complex Active Record queries as well as understanding
-relationships within a complex schema. I also became more comfortable with form_for and partials.
+#### Mod 2 Learning Goals reflected:
 
-Jomah: This project has allowed me to build a solid technical foundation in Rails, MVC model, RESTfulness, and OOP principles. It has also been a great experience in working on a group project with tight deadlines. Managing git workflow at a fast pace has been a great challenge and experience.
+- Database relationships and migrations
+- ActiveRecord
+- Software Testing
+- HTML/CSS layout and styling
 
-Ray: This project has been a great learning experience in making an ecom website. Being able to implement features that I've used on amazon and other online shops has been really interesting. Working with great partners and learning all the new tools on rails has been a big win for me!
+---
 
-Wren: Working through this project was a fantastic opportunity to work in two major growth areas: brown field code and branching out from user stories. The original repo was set up for us, and included a bit of code. This was great experience for me on working in someone else's code base. Also, as the user stories progressed, I spent a significant amount of time working in code that another of my team mates had built to further my functionality. I greatly enjoyed the challenge, and feel that it was a fantastic learning opportunity. The other major area of growth was branching off from the user stories. I worked on creating functionality for users to be able to message a merchant through the site, reply to a merchant message, and the same for merchants to users. Due to time constraints, our team did not feel the code was well enough tested to push into production. Attached are a few of the screen shots of the functionality we were building but did not feel was refined enough to include in master.
+# Additional Extensions
 
-Our table in the schema: https://user-images.githubusercontent.com/49083187/72099744-279cae00-3319-11ea-90a1-ce7ccba55a87.png
+## Bulk Discount
 
-Messages Controller: https://user-images.githubusercontent.com/49083187/72099762-2ec3bc00-3319-11ea-8747-87266e640ccf.png
+#### General Goals
 
-The dashboard with a link to the messages index page: https://user-images.githubusercontent.com/49083187/72099768-34210680-3319-11ea-836e-e562eed52829.png
+Merchants add bulk discount rates for all of their inventory. These apply automatically in the shopping cart, and adjust the order_items price upon checkout.
 
-Messages index page: https://user-images.githubusercontent.com/49083187/72099781-397e5100-3319-11ea-8185-ead57bb2c555.png
+#### Completion Criteria
 
-Message show page with reply and delete buttons: https://user-images.githubusercontent.com/49083187/72099803-41d68c00-3319-11ea-917c-0e60be523e1f.png
+1. Merchants need full CRUD functionality on bulk discounts, and will be accessed a link on the merchant's dashboard.
+1. You can choose what type of bulk discount to implement: percentage based, or dollar based. For example:
+   - 5% discount on 20 or more items
+   - $10 off an order of $50 or more
+1. A merchant can have multiple bulk discounts in the system.
+1. When a user adds enough value or quantity of items to their cart, the bulk discount will automatically show up on the cart page.
+1. A bulk discount from one merchant will only affect items from that merchant in the cart.
+1. A bulk discount will only apply to items which exceed the minimum quantity specified in the bulk discount. (eg, a 5% off 5 items or more does not activate if a user is buying 1 quantity of 5 different items; if they raise the quantity of one item to 5, then the bulk discount is only applied to that one item, not all of the others as well)
 
-Future Goals: Were we to continue this project, I would finish the implementation of the messaging service, including admin to user or admin to merchant and reverse. I would also include a show page for messages sent along with their status as read or unread for both merchant and user.
+#### Implementation Guidelines
+
+1. When an order is created during checkout, try to adjust the price of the items in the order_items table.
+
+#### Mod 2 Learning Goals reflected:
+
+- Database relationships and migrations
+- Advanced ActiveRecord
+- Software Testing
+- HTML/CSS layout and styling
+
+---
+
+## Merchant To-Do List
+
+#### General Goals
+
+Merchant dashboards will display a to-do list of tasks that need their attention.
+
+#### Completion Criteria
+
+1. Merchants should be shown a list of items which are using a placeholder image and encouraged to find an appropriate image instead; each item is a link to that item's edit form.
+1. Merchants should see a statistic about unfulfilled items and the revenue impact. eg, "You have 5 unfulfilled orders worth $752.86"
+1. Next to each order on their dashboard, Merchants should see a warning if an item quantity on that order exceeds their current inventory count.
+1. If several orders exist for an item, and their summed quantity exceeds the Merchant's inventory for that item, a warning message is shown.
+
+#### Implementation Guidelines
+
+1. Make sure you are testing for all happy path and sad path scenarios.
+
+#### Mod 2 Learning Goals reflected:
+
+- MVC and Rails development
+- Database relationships and migrations
+- ActiveRecord
+- Software Testing
+
+# Rubric
+
+| | **Feature Completeness** | **Rails** | **ActiveRecord** | **Testing and Debugging** | **Styling, UI/UX** |
+| --- | --- | --- | --- | --- | --- |
+| **4: Exceptional**  | One or more additional extension features complete. | Students implement strategies not discussed in class to effectively organize code and adhere to MVC. | Highly effective and efficient use of ActiveRecord beyond what we've taught in class. Even `.each` calls will not cause additional database lookups. | Very clear Test Driven Development. Test files are extremely well organized and nested. Students utilize `before :each` blocks. 100% coverage for features and models | Extremely well styled and purposeful layout. Excellent color scheme and font usage. All other rubric categories score 3 or 4. |
+| **3: Passing** | Multiple address feature 100% complete, including all sad paths and edge cases | Students use the principles of MVC to effectively organize code. Students can defend any of their design decisions. | ActiveRecord is used in a clear and effective way to read/write data using no Ruby to process data. | 100% coverage for models. 98% coverage for features. Tests are well written and meaningful. All preexisting tests still pass. | Purposeful styling pattern and layout using `application.html.erb`. Links or buttons to reach all areas of the site. |
+| **2: Passing with Concerns** | One of the completion criteria for Multiple Address feature is not complete or fails to handle a sad path or edge case | Students utilize MVC to organize code, but cannot defend some of their design decisions. Or some functionality is not limited to the appropriately authorized users. | Ruby is used to process data that could use ActiveRecord instead. | Feature test coverage between 90% and 98%, or model test coverage below 100%, or tests are not meaningfully written or have an unclear objective. | Styling is poor or incomplete. Incomplete navigation for some routes, i.e. users must manually type URLs. |
+| **1: Failing** | More than one of the completion criteria for Multiple Address feature is not complete or fails to handle a sad path or edge case | Students do not effectively organize code using MVC. Or students do not authorize users. | Ruby is used to process data more often than ActiveRecord | Below 90% coverage for either features or models. | No styling or no buttons or links to navigate the site. |
