@@ -20,6 +20,24 @@ class Merchant::CouponsController < Merchant::BaseController
     end
   end
 
+  def edit
+    merchant = current_user.merchant
+    @coupon = merchant.coupons.find(params[:id])
+  end
+
+  def update
+    merchant = current_user.merchant
+    @coupon = merchant.coupons.find(params[:id])
+    @coupon.update(coupon_params)
+    if @coupon.save
+      flash[:success] = "Coupon Updated"
+      redirect_to "/merchant/coupons/#{@coupon.id}"
+    else
+      generate_error(@coupon)
+      render :edit
+    end
+  end
+
   def show
     merchant = current_user.merchant
     @coupon = merchant.coupons.find(params[:id])

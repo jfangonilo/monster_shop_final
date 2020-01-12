@@ -2,3 +2,4 @@
 <p><%= @coupon.code %></p>
 <p><%= @coupon.percent_off %></p>
 <p><%= @coupon.active ? "Active" : "Inactive "%></p>
+<p><%= link_to "Edit Coupon", "/merchant/coupons/#{@coupon.id}/edit" %></p>

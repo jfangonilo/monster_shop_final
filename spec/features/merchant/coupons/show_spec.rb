@@ -17,5 +17,11 @@ RSpec.describe "As a merchant user" do
       expect(page).to have_content @coupon_1.percent_off
       expect(page).to have_content "Active"
     end
+
+    it "has a link to edit the coupon" do
+      visit "/merchant/coupons/#{@coupon_1.id}"
+      click_link "Edit Coupon"
+      expect(current_path).to eq "/merchant/coupons/#{@coupon_1.id}/edit"
+    end
   end
 end

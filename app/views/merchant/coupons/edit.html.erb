@@ -1,0 +1,5 @@
+<h1>Edit Coupon</h1>
+
+<%= form_for [:merchant, @coupon], url: "/merchant/coupons/#{@coupon.id}" do |form| %>
+  <%= render partial: '/merchant/coupons/form', locals: { f: form } %>
+<% end %>
