@@ -1,0 +1,10 @@
+<%= f.label :name %>
+<%= f.text_field :name %> <br>
+
+<%= f.label :code %>
+<%= f.text_field :code %> <br>
+
+<%= f.label :percent_off %>
+<%= f.select :percent_off, (1..99).map {|i| i.to_f/100} %><br>
+
+<%= f.submit %> <br>

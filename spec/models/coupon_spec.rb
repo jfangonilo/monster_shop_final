@@ -13,5 +13,20 @@ RSpec.describe Coupon do
 
   describe 'relationships' do
     it { should belong_to :merchant }
+    it { should have_many :orders }
+  end
+
+  describe 'instance methods' do
+    before :each do
+      @merchant = create(:jomah_merchant)
+      @coupon_1 = create(:coupon_1, merchant: @merchant)
+      @coupon_2 = create(:coupon_2, merchant: @merchant)
+      @order = create(:random_order, coupon: @coupon_2)
+    end
+
+    it 'no_orders?' do
+      expect(@coupon_1.no_orders?).to be true
+      expect(@coupon_2.no_orders?).to be false
+    end
   end
 end

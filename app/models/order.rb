@@ -4,6 +4,7 @@ class Order <ApplicationRecord
   has_many :item_orders, dependent: :destroy
   has_many :items, through: :item_orders
   belongs_to :user
+  belongs_to :coupon, optional: true
 
   enum status: %w(packaged pending shipped cancelled)
 
