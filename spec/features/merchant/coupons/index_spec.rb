@@ -12,6 +12,15 @@ RSpec.describe "As a merchant user" do
   end
 
   describe "the coupon index page" do
+    it "can be accessed from the nav bar" do
+      visit "/"
+      within ".topnav" do
+        click_link "All Coupons"
+      end
+
+      expect(current_path).to eq "/merchant/coupons"
+    end
+
     it "shows the merchant's coupons" do
       within "#coupon-#{@coupon_1.id}" do
         expect(page).to have_link @coupon_1.name

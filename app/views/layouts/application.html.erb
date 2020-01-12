@@ -19,6 +19,7 @@
         <%= link_to "All Users", "/admin/users" %>
         <%= link_to "Log Out", "/logout" %>
       <% elsif current_merchant_user? %>
+        <%= link_to "All Coupons", "/merchant/coupons" %>
         <%= link_to "Cart: #{cart.total_items}", "/cart" %>
         <%= link_to "Merchant Dashboard", "/merchant" %>
         <%= link_to "Log Out", "/logout" %>
