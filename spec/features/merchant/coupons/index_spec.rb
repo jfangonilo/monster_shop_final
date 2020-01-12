@@ -28,5 +28,10 @@ RSpec.describe "As a merchant user" do
       end
     end
 
+    it "has a link to the coupon show page" do
+      click_link @coupon_1.name
+      expect(current_path).to eq("/merchant/coupons/#{@coupon_1.id}")
+    end
+
   end
 end

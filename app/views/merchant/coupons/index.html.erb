@@ -3,7 +3,7 @@
 <section class="grid-container" id="coupons">
   <% @coupons.each do |coupon| %>
     <section class="grid-item" id="coupon-<%= coupon.id %>">
-      <p><%= link_to coupon.name %></p>
+      <p><%= link_to coupon.name, "/merchant/coupons/#{coupon.id}" %></p>
       <p><%= coupon.code %></p>
       <p><%= coupon.percent_off %></p>
       <p><%= coupon.active ? "Active" : "Inactive "%></p>
