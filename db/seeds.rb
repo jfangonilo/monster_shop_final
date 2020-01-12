@@ -6,6 +6,7 @@ Review.destroy_all
 User.destroy_all
 Order.destroy_all
 ItemOrder.destroy_all
+Coupon.destroy_all
 
 #creates 4 merchants
 jomah = create(:jomah_merchant)
@@ -59,3 +60,6 @@ order_4 = create(:random_order, user: user, status: 3)
 Item.all.each do |item|
   create(:item_order, order: order_3, item: item, price: item.price)
 end
+
+create(:coupon_1, merchant: jomah)
+create(:coupon_2, merchant: jomah)
