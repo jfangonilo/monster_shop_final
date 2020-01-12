@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     end
 
     resources :items, only: [:index, :new, :create]
+    resources :coupons, only: [:index]
     get "/", to: "dashboard#index"
   end
 
