@@ -9,4 +9,9 @@ class Coupon < ApplicationRecord
   validates_numericality_of :percent_off, greater_than: 0, less_than: 1
 
   belongs_to :merchant
+  has_many :orders
+
+  def no_orders?
+    orders.empty?
+  end
 end
