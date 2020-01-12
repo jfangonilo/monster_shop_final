@@ -33,5 +33,10 @@ RSpec.describe "As a merchant user" do
       expect(current_path).to eq("/merchant/coupons/#{@coupon_1.id}")
     end
 
+    it "has a link to create a new coupon" do
+      click_link "New Coupon"
+      expect(current_path).to eq("/merchant/coupons/new")
+    end
+
   end
 end
