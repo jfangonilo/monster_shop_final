@@ -84,4 +84,49 @@ RSpec.describe "As a visitor" do
       expect(page).to have_content @item_6.price
     end
   end
+
+  it "I can check out with the coupon code and see my discounts applied" do
+    visit "/cart"
+    fill_in "Coupon", with: "50OFF"
+    click_button "Apply Coupon"
+    click_link "Checkout"
+
+    fill_in "Name", with: "fake Name"
+    fill_in "Address", with: "fake Address"
+    fill_in "City", with: "fake City"
+    fill_in "State", with: "fake State"
+    fill_in "Zip", with: 12345
+    click_button "Create Order"
+
+    order = Order.last
+    expect(order.coupon_id).to eq @coupon_1.id
+    expect(current_path).to eq "/profile/orders"
+    click_link "Order ID: #{order.id}"
+
+    expect(page).to have_content @coupon_1.name
+
+    within "#item-#{@item_1.id}" do
+      expect(page).to have_content "$50.06"
+    end
+
+    within "#item-#{@item_2.id}" do
+      expect(page).to have_content "$25.07"
+    end
+
+    within "#item-#{@item_3.id}" do
+      expect(page).to have_content "$12.50"
+    end
+
+    within "#item-#{@item_4.id}" do
+      expect(page).to have_content @item_4.price
+    end
+
+    within "#item-#{@item_5.id}" do
+      expect(page).to have_content @item_5.price
+    end
+
+    within "#item-#{@item_6.id}" do
+      expect(page).to have_content @item_6.price
+    end
+  end
 end
