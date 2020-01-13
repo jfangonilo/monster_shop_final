@@ -1,65 +1,66 @@
 <h1>Cart</h1>
-<% if !@items.empty? %>
-<center>
-<table class = "cart-items">
-  <tr>
-    <th>Item</th>
-    <th>Sold By</th>
-    <th>Price</th>
-    <th>Quantity</th>
-    <th>Subtotal</th>
-  </tr>
-  <% @items.each do |item,quantity| %>
-    <tr id= "cart-item-<%=item.id%>">
-      <td>
-        <p align = "center">
-          <span>
-            <img align = "center" id="cart-image" src= <%= item.image %>>
-            <%=link_to item.name, "/items/#{item.id}" %>
-          </span>
-        </p>
-      </td>
-      <td>
-        <p align = "center">
-          <%=link_to item.merchant.name, "/merchants/#{item.merchant.id}"%>
-        </p>
-      </td>
-      <td>
-        <p><%=number_to_currency(item.price/100.to_f)%></p>
-        <p>(<%=number_to_currency(item.discount_if_applicable(coupon)/100.to_f) if coupon%>)</p>
-      </td>
-      <td>
-        <center>
-          <section id="item-<%=item.id%>">
-          <p><%=quantity%></p>
-          <p><%= button_to "Add Item", "/cart/#{item.id}?add_subtract=add", method: :patch %>
-          <%= button_to "Subtract Item", "/cart/#{item.id}?add_subtract=subtract", method: :patch %></p>
-          <p><%= link_to "Remove", "/cart/#{item.id}", method: :delete %></p>
-          </section>
-        </center>
-        </td>
-      <td>
-        <p><%=number_to_currency(cart.subtotal(item)/100.to_f)%></p>
-      </td>
-    </tr>
-  <% end %>
-</table>
-  <p>Total: <%= number_to_currency(cart.total/100.to_f) %></p>
-  <p>Discounted Total: Placeholder</p>
-  <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
-  <% if current_user %>
-    <p><%= link_to "Checkout", "/profile/orders/new", method: :get%></p>
-  <% else %>
-    <p> Login needed to Checkout </p>
-  <% end %>
+<% if @items.empty? %>
+  <p> Cart is currently empty </p>
 <% else %>
-  <h3 align= "center">Cart is currently empty</h3>
+  <center>
+  <table class = "cart-items">
+    <tr>
+      <th>Item</th>
+      <th>Sold By</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Subtotal</th>
+    </tr>
+    <% @items.each do |item,quantity| %>
+      <tr id= "cart-item-<%=item.id%>">
+        <td>
+          <p align = "center">
+            <span>
+              <img align = "center" id="cart-image" src= <%= item.image %>>
+              <%=link_to item.name, "/items/#{item.id}" %>
+            </span>
+          </p>
+        </td>
+        <td>
+          <p align = "center">
+            <%=link_to item.merchant.name, "/merchants/#{item.merchant.id}"%>
+          </p>
+        </td>
+        <td>
+          <p><%=number_to_currency(item.price/100.to_f)%></p>
+          <p>(<%=number_to_currency(item.discount_if_applicable(coupon)/100.to_f) if coupon%>)</p>
+        </td>
+        <td>
+          <center>
+            <section id="item-<%=item.id%>">
+            <p><%=quantity%></p>
+            <p><%= button_to "Add Item", "/cart/#{item.id}?add_subtract=add", method: :patch %>
+            <%= button_to "Subtract Item", "/cart/#{item.id}?add_subtract=subtract", method: :patch %></p>
+            <p><%= link_to "Remove", "/cart/#{item.id}", method: :delete %></p>
+            </section>
+          </center>
+          </td>
+        <td>
+          <p><%=number_to_currency(cart.subtotal(item)/100.to_f)%></p>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+    <p>Total: <%= number_to_currency(cart.total/100.to_f) %></p>
+    <p>Discounted Total: Placeholder</p>
+    <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
+    <% if current_user %>
+      <p><%= link_to "Checkout", "/profile/orders/new", method: :get%></p>
+    <% else %>
+      <p> Login needed to Checkout </p>
+    <% end %>
+  <table>
+  </center>
 <% end %>
-<table>
+
 <%= form_tag "/cart/coupon", method: :post do %>
   <%= label_tag :coupon %>
   <%= text_field_tag :coupon %><br>
 
   <%= submit_tag "Apply Coupon" %>
 <% end %>
-</center>
