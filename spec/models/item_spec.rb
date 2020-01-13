@@ -129,4 +129,16 @@ describe Item, type: :model do
       expect(items.last.quantity).to eq(4)
     end
   end
+
+  describe 'class methods' do
+    it 'active_items' do
+      item_1 = create(:random_item)
+      item_2 = create(:random_item)
+      item_3 = create(:random_item, active?: false)
+
+      expect(Item.active_items).to include item_1
+      expect(Item.active_items).to include item_2
+      expect(Item.active_items).not_to include item_3
+    end
+  end
 end

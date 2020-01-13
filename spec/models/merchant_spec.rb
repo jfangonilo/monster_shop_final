@@ -76,5 +76,30 @@ describe Merchant, type: :model do
 
       expect(jomah.item_orders_from(order)).to match_array [item_order_1, item_order_2]
     end
+
+    it 'pending_orders' do
+      jomah = create(:jomah_merchant)
+      ray = create(:ray_merchant)
+
+      user = create(:regular_user)
+      merchant_user = create(:merchant_employee, merchant: jomah)
+
+      item_1 = create(:random_item, merchant: jomah, inventory: 10)
+      item_2 = create(:random_item, merchant: jomah, inventory: 5)
+      item_3 = create(:random_item, merchant: ray, inventory: 10)
+
+      order = create(:random_order, user: user)
+      create(:item_order, order: order, item: item_1, price: item_1.price, quantity: 5)
+      create(:item_order, order: order, item: item_2, price: item_2.price, quantity: 6)
+      create(:item_order, order: order, item: item_3, price: item_3.price, quantity: 5)
+
+      order_2 = create(:random_order, user: user, status: "shipped")
+      create(:item_order, order: order_2, item: item_1, price: item_1.price, quantity: 5)
+      create(:item_order, order: order_2, item: item_2, price: item_2.price, quantity: 6)
+      create(:item_order, order: order_2, item: item_3, price: item_3.price, quantity: 5)
+
+      expect(jomah.pending_orders).to include order
+      expect(jomah.pending_orders).not_to include order_2
+    end
   end
 end
