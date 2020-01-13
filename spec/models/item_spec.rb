@@ -49,6 +49,10 @@ describe Item, type: :model do
       expect(@chain.no_orders?).to eq(false)
     end
 
+    it "discounted_price" do
+      expect(@chain.discounted_price(0.5)).to eq 25
+    end
+
     it 'can find top five selling items' do
       user = create(:regular_user)
       order = create(:random_order, user: user)
