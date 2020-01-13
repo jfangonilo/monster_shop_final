@@ -42,12 +42,13 @@
           </td>
         <td>
           <p><%=number_to_currency(cart.subtotal(item)/100.to_f)%></p>
+          <p>(<%=number_to_currency(cart.discounted_subtotal(item, coupon)/100.to_f) if coupon %>)</p>
         </td>
       </tr>
     <% end %>
   </table>
     <p>Total: <%= number_to_currency(cart.total/100.to_f) %></p>
-    <p>Discounted Total: Placeholder</p>
+    <p>Discounted Total: <%= number_to_currency(cart.discounted_total(coupon)/100.to_f) if coupon %></p>
     <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
     <% if current_user %>
       <p><%= link_to "Checkout", "/profile/orders/new", method: :get%></p>
