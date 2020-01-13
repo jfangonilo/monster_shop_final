@@ -26,8 +26,12 @@ class Item <ApplicationRecord
     item_orders.empty?
   end
 
-  def discounted_price(percent)
-    price*(1-percent)
+  def discount_if_applicable(coupon)
+    if coupon["merchant_id"] == merchant_id
+      price*(1-coupon["percent_off"].to_f)
+    else
+      price
+    end
   end
 
   def self.active_items
