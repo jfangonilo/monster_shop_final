@@ -1,12 +1,5 @@
 <h1>Cart</h1>
 
-  <%= form_tag "/coupon", method: :post do %>
-    <%= label_tag :coupon %>
-    <%= text_field_tag :coupon %><br>
-
-    <%= submit_tag "Apply Coupon" %>
-  <% end %>
-
 <% if !@items.empty? %>
 <center>
 <table class = "cart-items">
@@ -14,8 +7,10 @@
     <th>Item</th>
     <th>Sold By</th>
     <th>Price</th>
+    <th>Discounted Price</th>
     <th>Quantity</th>
     <th>Subtotal</th>
+    <th>Discounted Subtotal</th>
   </tr>
   <% @items.each do |item,quantity| %>
     <tr id= "cart-item-<%=item.id%>">
@@ -36,6 +31,9 @@
         <p><%=number_to_currency(item.price/100.to_f)%></p>
       </td>
       <td>
+       <p>Placeholder</p>
+      </td>
+      <td>
         <center>
           <section id="item-<%=item.id%>">
           <p><%=quantity%></p>
@@ -47,11 +45,15 @@
         </td>
       <td>
         <p><%=number_to_currency(cart.subtotal(item)/100.to_f)%></p>
-    </td>
+      </td>
+      <td>
+        <p>Placeholder</p>
+      </td>
     </tr>
   <% end %>
 </table>
   <p>Total: <%= number_to_currency(cart.total/100.to_f) %></p>
+  <p>Discounted Total: Placeholder</p>
   <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
   <% if current_user %>
     <p><%= link_to "Checkout", "/profile/orders/new", method: :get%></p>
@@ -62,4 +64,10 @@
   <h3 align= "center">Cart is currently empty</h3>
 <% end %>
 <table>
+<%= form_tag "/cart/coupon", method: :post do %>
+  <%= label_tag :coupon %>
+  <%= text_field_tag :coupon %><br>
+
+  <%= submit_tag "Apply Coupon" %>
+<% end %>
 </center>
