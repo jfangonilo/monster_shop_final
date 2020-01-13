@@ -26,6 +26,10 @@ class Item <ApplicationRecord
     item_orders.empty?
   end
 
+  def discounted_price(percent)
+    price*(1-percent)
+  end
+
   def self.active_items
     where(active?: true)
   end
