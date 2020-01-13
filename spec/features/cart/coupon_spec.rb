@@ -51,4 +51,37 @@ RSpec.describe "As a visitor" do
     expect(page).to have_content "Invalid Coupon"
     expect(current_path).to eq '/cart'
   end
+
+  it "I can see the total discount for items the coupon applies for" do
+    visit '/cart'
+    fill_in "Coupon", with: "50OFF"
+    click_button "Apply Coupon"
+
+    expect(page).to have_content "Coupon applied for #{@merchant_1.name} items"
+    expect(current_path).to eq '/cart'
+
+    within "#cart-item-#{@item_1.id}" do
+      expect(page).to have_content "$50.06"
+    end
+
+    within "#cart-item-#{@item_2.id}" do
+      expect(page).to have_content "$25.07"
+    end
+
+    within "#cart-item-#{@item_3.id}" do
+      expect(page).to have_content "$12.50"
+    end
+
+    within "#cart-item-#{@item_4.id}" do
+      expect(page).to have_content @item_4.price
+    end
+
+    within "#cart-item-#{@item_5.id}" do
+      expect(page).to have_content @item_5.price
+    end
+
+    within "#cart-item-#{@item_6.id}" do
+      expect(page).to have_content @item_6.price
+    end
+  end
 end
