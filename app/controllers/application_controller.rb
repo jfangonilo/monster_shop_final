@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def coupon
-    @coupon = Coupon.find_by(name: session[:coupon]["name"]) if session[:coupon]
+    @coupon ||= Coupon.find(session[:coupon_id]) if session[:coupon_id]
   end
 
   def current_user
