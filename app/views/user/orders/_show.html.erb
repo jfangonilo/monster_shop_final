@@ -20,6 +20,9 @@
 <section id="order-status">
   <h2>Order ID: <%= @order.id %></h2>
   <h2>Order Status: <%= @order.status.capitalize %></h2>
+  <% if @order.coupon %>
+    <h3>Coupon Code: <%= @order.coupon.name %><h3>
+  <% end %>
   <h1 align = "center">Order Info</h1>
 </section>
 <center>

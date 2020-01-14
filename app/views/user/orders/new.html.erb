@@ -30,6 +30,13 @@
 <% end %>
 <h3 align = "right">Total: <%= number_to_currency(cart.total/100.to_f)%></h3>
 <center>
+<%= form_tag "/cart/coupon", method: :post do %>
+  <%= label_tag :coupon %>
+  <%= text_field_tag :coupon %><br>
+
+  <%= submit_tag "Apply Coupon" %>
+<% end %>
+
   <h2>Shipping Info:</h2>
   <%= form_tag "/orders", method: :create do %>
     <%= label_tag :name %>
