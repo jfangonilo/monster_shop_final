@@ -73,15 +73,15 @@ RSpec.describe "As a visitor" do
     end
 
     within "#cart-item-#{@item_4.id}" do
-      expect(page).to have_content @item_4.price
+      expect(page).to have_content number_to_currency(@item_4.price/100.to_f)
     end
 
     within "#cart-item-#{@item_5.id}" do
-      expect(page).to have_content @item_5.price
+      expect(page).to have_content number_to_currency(@item_5.price/100.to_f)
     end
 
     within "#cart-item-#{@item_6.id}" do
-      expect(page).to have_content @item_6.price
+      expect(page).to have_content number_to_currency(@item_6.price/100.to_f)
     end
   end
 
@@ -119,15 +119,15 @@ RSpec.describe "As a visitor" do
     end
 
     within "#item-#{@item_4.id}" do
-      expect(page).to have_content @item_4.price
+      expect(page).to have_content number_to_currency(@item_4.price/100.to_f)
     end
 
     within "#item-#{@item_5.id}" do
-      expect(page).to have_content @item_5.price
+      expect(page).to have_content number_to_currency(@item_5.price/100.to_f)
     end
 
     within "#item-#{@item_6.id}" do
-      expect(page).to have_content @item_6.price
+      expect(page).to have_content number_to_currency(@item_6.price/100.to_f)
     end
   end
 end

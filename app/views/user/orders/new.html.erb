@@ -2,15 +2,9 @@
 <table>
   <tr>
     <th>Item</th>
-    <th>
-      <p>Price</p>
-      <p><%= coupon ? "(Discounted Price)" : "" %></p>
-    </th>
+    <th><p>Price</p></th>
     <th>Quantity</th>
-    <th>
-      <p>Subtotal</p>
-      <p><%= coupon ? "(Discounted Subtotal)" : "" %></p>
-    </th>
+    <th><p>Subtotal</p></th>
     <th>Sold By</th>
     <th>Inventory</th>
   </tr>
@@ -18,25 +12,35 @@
     <tr id='order-item-<%= item.id%>'>
       <td><h2><%= link_to item.name, "/items/#{item.id}" %></h2></td>
       <td>
-        <p><%= number_to_currency(item.price/100.to_f) %></p>
-        <p>(<%=number_to_currency(item.discount_if_applicable(coupon)/100.to_f) if coupon%>)</p>
+        <% if item.coupon_applicable?(coupon) %>
+          <p><strike><%=number_to_currency(item.price/100.to_f)%></strike></p>
+          <p><%= number_to_currency(item.discount_if_applicable(coupon)/100.to_f) %></p>
+        <% else %>
+          <p><%=number_to_currency(item.price/100.to_f)%></p>
+        <% end %>
       </td>
       <td><p><%= quantity %></p></td>
       <td>
-        <p><%= number_to_currency(cart.subtotal(item)/100.to_f) %></p>
-        <p>(<%=number_to_currency(cart.discounted_subtotal(item, coupon)/100.to_f) if coupon %>)</p>
+        <% if item.coupon_applicable?(coupon) %>
+          <p><strike><%=number_to_currency(cart.subtotal(item)/100.to_f)%></strike></p>
+          <p><%=number_to_currency(cart.discounted_subtotal(item, coupon)/100.to_f)%></p>
+        <% else %>
+          <p><%=number_to_currency(cart.subtotal(item)/100.to_f)%></p>
+        <% end %>
       </td>
       <td><p><%= link_to item.merchant.name, "/merchants/#{item.merchant_id}" %></p></td>
       <td><p><%= item.inventory %> in stock</p></td>
     </tr>
   <% end %>
 </table>
-<h3 align = "right">Total: <%= number_to_currency(cart.total/100.to_f)%></h3>
-<h3 align = "right">Discounted Total: <%= number_to_currency(cart.discounted_total(coupon)/100.to_f) if coupon %></h3>
-<center>
 <% if coupon %>
+  <h3 align = "right"><strike>Total: <%= number_to_currency(cart.total/100.to_f) %></strike></h3>
+  <h3 align = "right">Total: <%= number_to_currency(cart.discounted_total(coupon)/100.to_f)%></h3>
   <h4 align = "right">Coupon code <%= coupon.code %> applied for all items from <%= coupon.merchant.name %></h4>
+<% else %>
+  <h3 align = "right">Total: <%= number_to_currency(cart.total/100.to_f) %></h3>
 <% end %>
+<center>
 <%= form_tag "/cart/coupon", method: :post do %>
   <%= label_tag :coupon %>
   <%= text_field_tag :coupon %><br>
