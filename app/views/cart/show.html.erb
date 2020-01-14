@@ -7,9 +7,15 @@
     <tr>
       <th>Item</th>
       <th>Sold By</th>
-      <th>Price</th>
+      <th>
+        <p>Price</p>
+        <p><%= coupon ? "(Discounted Price)" : "" %></p>
+      </th>
       <th>Quantity</th>
-      <th>Subtotal</th>
+      <th>
+        <p>Subtotal</p>
+        <p><%= coupon ? "(Discounted Subtotal)" : "" %></p>
+      </th>
     </tr>
     <% @items.each do |item,quantity| %>
       <tr id= "cart-item-<%=item.id%>">
@@ -28,7 +34,7 @@
         </td>
         <td>
           <p><%=number_to_currency(item.price/100.to_f)%></p>
-          <p>(<%=number_to_currency(item.discount_if_applicable(coupon)/100.to_f) if coupon%>)</p>
+          <p><%="(#{number_to_currency(item.discount_if_applicable(coupon)/100.to_f)})" if coupon %></p>
         </td>
         <td>
           <center>
@@ -42,16 +48,16 @@
           </td>
         <td>
           <p><%=number_to_currency(cart.subtotal(item)/100.to_f)%></p>
-          <p>(<%=number_to_currency(cart.discounted_subtotal(item, coupon)/100.to_f) if coupon %>)</p>
+          <p><%="(#{number_to_currency(cart.discounted_subtotal(item, coupon)/100.to_f)})" if coupon %></p>
         </td>
       </tr>
     <% end %>
   </table>
-    <p>Total: <%= number_to_currency(cart.total/100.to_f) %></p>
+    <h3>Total: <%= number_to_currency(cart.total/100.to_f) %></h3>
+    <h3>Discounted Total: <%= number_to_currency(cart.discounted_total(coupon)/100.to_f) if coupon %></h3>
     <% if coupon %>
       <h4>Coupon code <%= coupon.code %> applied for all items from <%= coupon.merchant.name %></h4>
     <% end %>
-    <p>Discounted Total: <%= number_to_currency(cart.discounted_total(coupon)/100.to_f) if coupon %></p>
     <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
     <% if current_user %>
       <p><%= link_to "Checkout", "/profile/orders/new", method: :get%></p>
