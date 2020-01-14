@@ -4,10 +4,10 @@ class CouponController < ApplicationController
     if coupon
       session[:coupon_id] = coupon.id
       flash[:success] = "Coupon applied for #{coupon.merchant.name} items"
-      redirect_to "/cart"
+      redirect_back(fallback_location: "/cart")
     else
       flash[:error] = "Invalid Coupon"
-      redirect_to "/cart"
+      redirect_back(fallback_location: "/cart")
     end
   end
 end
