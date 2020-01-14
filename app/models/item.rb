@@ -26,12 +26,12 @@ class Item <ApplicationRecord
     item_orders.empty?
   end
 
+  def coupon_applicable?(coupon)
+    (coupon && coupon.merchant_id == merchant_id) ? true : false
+  end
+
   def discount_if_applicable(coupon)
-    if coupon.nil? || coupon.merchant_id != merchant_id
-      price
-    else
-      price*(1-coupon.percent_off.to_f)
-    end
+    coupon_applicable?(coupon) ? price*(1-coupon.percent_off.to_f) : price
   end
 
   def self.active_items

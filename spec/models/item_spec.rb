@@ -58,6 +58,12 @@ describe Item, type: :model do
       expect(@item.discount_if_applicable(nil)).to eq 100
     end
 
+    it "coupon_applicable?" do
+      expect(@chain.coupon_applicable?(@coupon)).to be_truthy
+      expect(@item.coupon_applicable?(@coupon)).to be_falsey
+      expect(@item.coupon_applicable?(nil)).to be_falsey
+    end
+
     it 'can find top five selling items' do
       user = create(:regular_user)
       order = create(:random_order, user: user)
