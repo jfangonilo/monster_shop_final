@@ -69,7 +69,7 @@ Rails.application.routes.draw do
   post "/orders", to: "user/orders#create"
   patch "/profile/orders/:id/cancel", to: "user/orders#cancel"
 
-  post "/cart/coupon", to: "coupon#apply_coupon"
+  post "/cart/coupon", to: "coupon#update"
   post "/cart/:item_id", to: "cart#add_item"
   patch "/cart/:item_id", to: "cart#add_subtract_cart"
   get "/cart", to: "cart#show"
