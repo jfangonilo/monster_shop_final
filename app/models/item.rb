@@ -27,7 +27,9 @@ class Item <ApplicationRecord
   end
 
   def discount_if_applicable(coupon)
-    if coupon.merchant_id == merchant_id
+    if coupon.nil?
+      price
+    elsif coupon.merchant_id == merchant_id
       price*(1-coupon.percent_off.to_f)
     else
       price

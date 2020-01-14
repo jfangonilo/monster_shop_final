@@ -55,6 +55,7 @@ describe Item, type: :model do
     it "discount_if_applicable" do
       expect(@chain.discount_if_applicable(@coupon)).to eq 25
       expect(@item.discount_if_applicable(@coupon)).to eq 100
+      expect(@item.discount_if_applicable(nil)).to eq 100
     end
 
     it 'can find top five selling items' do
