@@ -37,12 +37,6 @@ private
   end
 
   def create_order(order)
-    coupon ? apply_discount(order) : no_discount(order)
-    session.delete(:cart)
-    session.delete(:coupon)
-  end
-
-  def apply_discount(order)
     order.update(coupon: coupon)
     cart.items.each do |item,quantity|
       order.item_orders.create({
@@ -51,15 +45,7 @@ private
         price: item.discount_if_applicable(coupon)
       })
     end
-  end
-
-  def no_discount(order)
-    cart.items.each do |item,quantity|
-      order.item_orders.create({
-        item: item,
-        quantity: quantity,
-        price: item.price
-      })
-    end
+    session.delete(:cart)
+    session.delete(:coupon)
   end
 end
