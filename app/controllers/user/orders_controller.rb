@@ -11,8 +11,6 @@ class User::OrdersController < User::BaseController
     order = current_user.orders.create(order_params)
     if order.save
       create_order(order)
-      session.delete(:cart)
-      session.delete(:coupon)
       flash[:notice] = "Order Placed"
       redirect_to profile_orders_path
     else
@@ -39,21 +37,19 @@ private
   end
 
   def create_order(order)
-    if coupon
-      apply_discount(order)
-      order.update(coupon: coupon)
-    else
-      no_discount(order)
-    end
+    coupon ? apply_discount(order) : no_discount(order)
+    session.delete(:cart)
+    session.delete(:coupon)
   end
 
   def apply_discount(order)
+    order.update(coupon: coupon)
     cart.items.each do |item,quantity|
       order.item_orders.create({
         item: item,
         quantity: quantity,
         price: item.discount_if_applicable(coupon)
-        })
+      })
     end
   end
 
@@ -63,7 +59,7 @@ private
         item: item,
         quantity: quantity,
         price: item.price
-        })
+      })
     end
   end
 end
