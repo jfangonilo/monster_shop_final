@@ -87,9 +87,10 @@ RSpec.describe "As a visitor" do
 
   it "I can check out with the coupon code and see my discounts applied" do
     visit "/cart"
+    click_link "Checkout"
+
     fill_in "Coupon", with: "50OFF"
     click_button "Apply Coupon"
-    click_link "Checkout"
 
     fill_in "Name", with: "fake Name"
     fill_in "Address", with: "fake Address"
