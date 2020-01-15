@@ -13,7 +13,7 @@ RSpec.describe "As a visitor" do
     @item_6 = create(:random_item, merchant: @merchant_2)
 
     @coupon_1 = create(:coupon_1, merchant: @merchant_1)
-    @coupon_2 = create(:coupon_2, merchant: @merchant_2)
+    @coupon_2 = create(:coupon_2, merchant: @merchant_1)
 
     user = create(:random_user)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
@@ -83,6 +83,39 @@ RSpec.describe "As a visitor" do
     within "#cart-item-#{@item_6.id}" do
       expect(page).to have_content number_to_currency(@item_6.price/100.to_f)
     end
+  end
+
+  it "I can apply a different coupon" do
+    visit '/cart'
+    fill_in "Coupon", with: "50OFF"
+    click_button "Apply Coupon"
+
+    fill_in "Coupon", with: "25OFF"
+    click_button "Apply Coupon"
+
+    within "#cart-item-#{@item_1.id}" do
+      expect(page).not_to have_content "$50.06"
+      expect(page).to have_content "$75.09"
+    end
+
+    within "#cart-item-#{@item_2.id}" do
+      expect(page).not_to have_content "$25.07"
+      expect(page).to have_content "$37.60"
+    end
+
+    within "#cart-item-#{@item_3.id}" do
+      expect(page).not_to have_content "$12.50"
+      expect(page).to have_content "$18.75"
+    end
+  end
+
+  it "I can apply a coupon code at the checkout screen" do
+    visit "/cart"
+    click_link "Checkout"
+
+    fill_in "Coupon", with: "50OFF"
+    click_button "Apply Coupon"
+    expect(page).to have_content "Coupon applied for #{@merchant_1.name} items"
   end
 
   it "I can check out with the coupon code and see my discounts applied" do
