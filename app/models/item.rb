@@ -31,7 +31,7 @@ class Item <ApplicationRecord
   end
 
   def discount_if_applicable(coupon)
-    coupon_applicable?(coupon) ? price*(1-coupon.percent_off.to_f) : price
+    coupon_applicable?(coupon) ? price*(1-coupon.percent_off) : price
   end
 
   def self.active_items
