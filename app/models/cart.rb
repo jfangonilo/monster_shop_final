@@ -26,9 +26,19 @@ class Cart
     item.price * @contents[item.id.to_s]
   end
 
+  def discounted_subtotal(item, coupon)
+    item.discount_if_applicable(coupon) * @contents[item.id.to_s]
+  end
+
   def total
     @contents.sum do |item_id,quantity|
       Item.find(item_id).price * quantity
+    end
+  end
+
+  def discounted_total(coupon)
+    @contents.sum do |item_id, quantity|
+      Item.find(item_id).discount_if_applicable(coupon) * quantity
     end
   end
 

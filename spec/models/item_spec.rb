@@ -21,6 +21,9 @@ describe Item, type: :model do
     before(:each) do
       @bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       @chain = @bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
+      @item = create(:random_item, price: 100)
+
+      @coupon = create(:coupon_1, merchant: @bike_shop)
 
       @review_1 = @chain.reviews.create(title: "Great place!", content: "They have great bike stuff and I'd recommend them to anyone.", rating: 5)
       @review_2 = @chain.reviews.create(title: "Cool shop!", content: "They have cool bike stuff and I'd recommend them to anyone.", rating: 4)
@@ -47,6 +50,18 @@ describe Item, type: :model do
       order = user.orders.create(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033)
       order.item_orders.create(item: @chain, price: @chain.price, quantity: 2)
       expect(@chain.no_orders?).to eq(false)
+    end
+
+    it "discount_if_applicable" do
+      expect(@chain.discount_if_applicable(@coupon)).to eq 25
+      expect(@item.discount_if_applicable(@coupon)).to eq 100
+      expect(@item.discount_if_applicable(nil)).to eq 100
+    end
+
+    it "coupon_applicable?" do
+      expect(@chain.coupon_applicable?(@coupon)).to be_truthy
+      expect(@item.coupon_applicable?(@coupon)).to be_falsey
+      expect(@item.coupon_applicable?(nil)).to be_falsey
     end
 
     it 'can find top five selling items' do
@@ -115,10 +130,22 @@ describe Item, type: :model do
 
       expect(items.length).to eq(5)
       expect(items.first.quantity).to eq(0)
-      expect(items[1].quantity).to eq(1)
-      expect(items[2].quantity).to eq(2)
-      expect(items[3].quantity).to eq(4)
-      expect(items.last.quantity).to eq(5)
+      expect(items[1].quantity).to eq(0)
+      expect(items[2].quantity).to eq(1)
+      expect(items[3].quantity).to eq(2)
+      expect(items.last.quantity).to eq(4)
+    end
+  end
+
+  describe 'class methods' do
+    it 'active_items' do
+      item_1 = create(:random_item)
+      item_2 = create(:random_item)
+      item_3 = create(:random_item, active?: false)
+
+      expect(Item.active_items).to include item_1
+      expect(Item.active_items).to include item_2
+      expect(Item.active_items).not_to include item_3
     end
   end
 end
