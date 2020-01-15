@@ -1,6 +1,7 @@
 class Merchant::CouponsController < Merchant::BaseController
   def index
-    @coupons = Coupon.all
+    @merchant = current_user.merchant
+    @coupons = merchant.coupons
   end
 
   def new
