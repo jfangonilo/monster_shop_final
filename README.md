@@ -1,11 +1,14 @@
 # Monster Shop Extensions
 
+Monster Shop Extensions is the final solo project for Turing's Module 2 Back End Engineering program, built on a previous brownfield group project named Monster Shop.
 
-## Instructions
+Monster Shop is a fictional ecommerce website that allows you to browse through merchants and their items, add goods to your cart, and check out.
 
-* Fork this repository or use your existing project.
-* Clone your fork if you have forked.
-* When you are finished, push your code to your fork. (if you have forked)
+As a user, you have the ability to peruse the website without logging in, and add items to your cart. When you are ready to check out, you are required to register or log in to your profile. Once you have a profile, you have the ability to check out, change your password, change your personal information, view orders, or continue shopping.
+
+As a merchant, you have two different roles, merchant employee or merchant admin. A merchant employee can fulfill orders, create items, delete items, and view orders placed for that merchant. As a merchant admin, you have the same functionality, and you also have the ability to edit the merchant data.
+
+As an administrator, you have admin only views of merchant pages and user pages, except password edit. An admin can also fulfill and ship orders on behalf of a merchant. An admin has the ability to activate and deactivate merchants and users, as well as change the role of a user.
 
 ## Coupon Codes
 
@@ -46,67 +49,90 @@ Merchant users can generate coupon codes within the system.
 
 ---
 
-# Additional Extensions
+### [Heroku Link](https://final-monstershop-jf.herokuapp.com/)
 
-## Bulk Discount
+### [Jomah's GitHub Profile](https://github.com/jfangonilo)
 
-#### General Goals
+### Logins
+|| **Email** | **Password** |
+| --- | --- | --- |
+| Regular User | `imbatman@bat.com` | `robinsucks` |
+| Merchant Employee User | `hailhydra@redskullmaiil.com` | `america!1` |
+| Merchant Admin User | `abird@dmail.com` | `krypto2` |
+| Admin User | `fastestmanalive@yaboo.com` | `imfast1` |
 
-Merchants add bulk discount rates for all of their inventory. These apply automatically in the shopping cart, and adjust the order_items price upon checkout.
+### Schema Design
 
-#### Completion Criteria
+![schema](https://user-images.githubusercontent.com/53122061/72416804-ba33b780-3734-11ea-9c38-992b0e57ccb8.png)
 
-1. Merchants need full CRUD functionality on bulk discounts, and will be accessed a link on the merchant's dashboard.
-1. You can choose what type of bulk discount to implement: percentage based, or dollar based. For example:
-   - 5% discount on 20 or more items
-   - $10 off an order of $50 or more
-1. A merchant can have multiple bulk discounts in the system.
-1. When a user adds enough value or quantity of items to their cart, the bulk discount will automatically show up on the cart page.
-1. A bulk discount from one merchant will only affect items from that merchant in the cart.
-1. A bulk discount will only apply to items which exceed the minimum quantity specified in the bulk discount. (eg, a 5% off 5 items or more does not activate if a user is buying 1 quantity of 5 different items; if they raise the quantity of one item to 5, then the bulk discount is only applied to that one item, not all of the others as well)
+### Code Snippets
 
-#### Implementation Guidelines
+#### Model Methods
+Methods for the item model that return the discounted price of an item if coupon's `merchant_id` matches the item's `merchant_id` else the original price if the coupon isn't applicable to the item
+```ruby
+# item.rb
+def coupon_applicable?(coupon)
+  (coupon && coupon.merchant_id == merchant_id) ? true : false
+end
 
-1. When an order is created during checkout, try to adjust the price of the items in the order_items table.
+def discount_if_applicable(coupon)
+  coupon_applicable?(coupon) ? price*(1-coupon.percent_off) : price
+end
+```
 
-#### Mod 2 Learning Goals reflected:
+#### Controller Methods
+The helper method `create_order` for the Orders Controller that uses the above model methods to avoid extra conditionals and keep the controller DRY. 
+``` ruby
+# orders_controller.rb
+class User::OrdersController < User::BaseController
 
-- Database relationships and migrations
-- Advanced ActiveRecord
-- Software Testing
-- HTML/CSS layout and styling
+  def new
+  end
 
----
+  def show
+    @order = current_user.orders.find(params[:id])
+  end
 
-## Merchant To-Do List
+  def create
+    order = current_user.orders.create(order_params)
+    if order.save
+      create_order(order)
+      flash[:notice] = "Order Placed"
+      redirect_to profile_orders_path
+    else
+      flash[:notice] = "Please complete address form to create an order."
+      render :new
+    end
+  end
 
-#### General Goals
+  def index
+    @orders = current_user.orders
+  end
 
-Merchant dashboards will display a to-do list of tasks that need their attention.
+  def cancel
+    @order = current_user.orders.find(params[:id])
+    @order.cancel
+    flash[:notice] = "Order Cancelled"
+    redirect_to profile_path
+  end
 
-#### Completion Criteria
+private
 
-1. Merchants should be shown a list of items which are using a placeholder image and encouraged to find an appropriate image instead; each item is a link to that item's edit form.
-1. Merchants should see a statistic about unfulfilled items and the revenue impact. eg, "You have 5 unfulfilled orders worth $752.86"
-1. Next to each order on their dashboard, Merchants should see a warning if an item quantity on that order exceeds their current inventory count.
-1. If several orders exist for an item, and their summed quantity exceeds the Merchant's inventory for that item, a warning message is shown.
+  def order_params
+    params.permit(:name, :address, :city, :state, :zip)
+  end
 
-#### Implementation Guidelines
-
-1. Make sure you are testing for all happy path and sad path scenarios.
-
-#### Mod 2 Learning Goals reflected:
-
-- MVC and Rails development
-- Database relationships and migrations
-- ActiveRecord
-- Software Testing
-
-# Rubric
-
-| | **Feature Completeness** | **Rails** | **ActiveRecord** | **Testing and Debugging** | **Styling, UI/UX** |
-| --- | --- | --- | --- | --- | --- |
-| **4: Exceptional**  | One or more additional extension features complete. | Students implement strategies not discussed in class to effectively organize code and adhere to MVC. | Highly effective and efficient use of ActiveRecord beyond what we've taught in class. Even `.each` calls will not cause additional database lookups. | Very clear Test Driven Development. Test files are extremely well organized and nested. Students utilize `before :each` blocks. 100% coverage for features and models | Extremely well styled and purposeful layout. Excellent color scheme and font usage. All other rubric categories score 3 or 4. |
-| **3: Passing** | Multiple address feature 100% complete, including all sad paths and edge cases | Students use the principles of MVC to effectively organize code. Students can defend any of their design decisions. | ActiveRecord is used in a clear and effective way to read/write data using no Ruby to process data. | 100% coverage for models. 98% coverage for features. Tests are well written and meaningful. All preexisting tests still pass. | Purposeful styling pattern and layout using `application.html.erb`. Links or buttons to reach all areas of the site. |
-| **2: Passing with Concerns** | One of the completion criteria for Multiple Address feature is not complete or fails to handle a sad path or edge case | Students utilize MVC to organize code, but cannot defend some of their design decisions. Or some functionality is not limited to the appropriately authorized users. | Ruby is used to process data that could use ActiveRecord instead. | Feature test coverage between 90% and 98%, or model test coverage below 100%, or tests are not meaningfully written or have an unclear objective. | Styling is poor or incomplete. Incomplete navigation for some routes, i.e. users must manually type URLs. |
-| **1: Failing** | More than one of the completion criteria for Multiple Address feature is not complete or fails to handle a sad path or edge case | Students do not effectively organize code using MVC. Or students do not authorize users. | Ruby is used to process data more often than ActiveRecord | Below 90% coverage for either features or models. | No styling or no buttons or links to navigate the site. |
+  def create_order(order)
+    order.update(coupon: coupon)
+    cart.items.each do |item,quantity|
+      order.item_orders.create({
+        item: item,
+        quantity: quantity,
+        price: item.discount_if_applicable(coupon)
+      })
+    end
+    session.delete(:cart)
+    session.delete(:coupon)
+  end
+end
+```
