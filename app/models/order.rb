@@ -14,8 +14,8 @@ class Order <ApplicationRecord
 
   def cancel
     update(status: "cancelled")
+    item_orders.update_all(status: "unfulfilled")
     item_orders.each do |item_order|
-      item_order.update(status: "unfulfilled")
       item_order.item.update(inventory: item_order.item.inventory + item_order.quantity)
     end
   end
