@@ -10,9 +10,9 @@ RSpec.describe "As a merchant", type: :feature do
 
     it "can click on that link to add a new item" do
         item = create(:random_item, merchant: @merchant)
-        visit merchant_dash_items_path
+        visit "/merchant/items"
         click_on "Edit Item"
-        expect(current_path).to eq(edit_merchant_dash_item_path(item))
+        expect(current_path).to eq("/merchant/items/#{item.id}/edit")
 
         expect(find_field('Name').value).to eq item.name
         expect(find_field('Price').value).to eq item.price.to_s
@@ -35,7 +35,7 @@ RSpec.describe "As a merchant", type: :feature do
         click_button "Update Item"
 
         item.reload
-        expect(current_path).to eq(merchant_dash_items_path)
+        expect(current_path).to eq("/merchant/items")
         expect(item.name).to eq(name)
         expect(page).to have_content(name)
         expect(page).to have_css("img[src*='#{item.image}']")
@@ -43,9 +43,9 @@ RSpec.describe "As a merchant", type: :feature do
 
     it "will have all item details and only image can be blank" do
       item = create(:random_item, merchant: @merchant)
-      visit merchant_dash_items_path
+      visit "/merchant/items"
       click_on "Edit Item"
-      expect(current_path).to eq(edit_merchant_dash_item_path(item))
+      expect(current_path).to eq("/merchant/items/#{item.id}/edit")
 
       name = "Chamois Buttr"
       price = 18
@@ -61,7 +61,7 @@ RSpec.describe "As a merchant", type: :feature do
 
 
       item.reload
-      expect(current_path).to eq(merchant_dash_items_path)
+      expect(current_path).to eq("/merchant/items")
       expect(item.name).to eq(name)
       expect(page).to have_content(name)
       expect(page).to have_css("img[src*='#{item.image}']")
@@ -69,9 +69,9 @@ RSpec.describe "As a merchant", type: :feature do
 
     it "will have a price greater than 0 and quantity 0 or greater" do
       item = create(:random_item, merchant: @merchant)
-      visit merchant_dash_items_path
+      visit "/merchant/items"
       click_on "Edit Item"
-      expect(current_path).to eq(edit_merchant_dash_item_path(item))
+      expect(current_path).to eq("/merchant/items/#{item.id}/edit")
 
       name = "Chamois Buttr"
       price = 0

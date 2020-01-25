@@ -1,5 +1,3 @@
-<%= form_for [@item, @review] do |f| %>
-
   <%= f.label :title%>
   <%= f.text_field :title%> <br>
   <%= f.label :content%>
@@ -8,4 +6,3 @@
   <%= f.number_field :rating, within: 1...6%> <br>
 
   <%= f.submit %>
-<% end %>

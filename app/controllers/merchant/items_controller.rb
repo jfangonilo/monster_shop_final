@@ -13,7 +13,7 @@ class Merchant::ItemsController < Merchant::BaseController
     @merchant = current_user.merchant
     @item = @merchant.items.create(item_params)
     if @item.save
-      redirect_to merchant_dash_items_path
+      redirect_to "/merchant/items"
     else
       generate_error(@item)
       render :new
@@ -29,7 +29,7 @@ class Merchant::ItemsController < Merchant::BaseController
     @item = Item.find(params[:id])
     @item.update(item_params)
     if @item.save
-      redirect_to merchant_dash_items_path
+      redirect_to "/merchant/items"
     else
       generate_error(@item)
       render :edit
@@ -37,9 +37,9 @@ class Merchant::ItemsController < Merchant::BaseController
   end
 
   def toggle_active
-    item = Item.find(params[:item_id])
+    item = Item.find(params[:id])
     item.toggle!(:active?)
-    redirect_to merchant_dash_items_path
+    redirect_to "/merchant/items"
     if item.active?
       flash[:success] = "#{item.name} is now avalible for sale."
     else
@@ -52,7 +52,7 @@ class Merchant::ItemsController < Merchant::BaseController
     Review.where(item_id: item.id).destroy_all
     item.destroy
     flash[:success] = "Item Deleted"
-    redirect_to merchant_dash_items_path
+    redirect_to "/merchant/items"
   end
 
 private

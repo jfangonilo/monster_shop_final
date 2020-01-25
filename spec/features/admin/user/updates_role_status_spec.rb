@@ -9,7 +9,7 @@ RSpec.describe "As an admin", type: :feature do
 
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(admin)
 
-    visit admin_dash_users_path
+    visit "/admin/users"
 
     expect(user.role).to eq("user")
 

@@ -12,7 +12,7 @@ RSpec.describe "As an admin user", type: :feature do
     end
     it "I see a disable/enable button next to any user" do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin_user)
-      visit admin_dash_users_path
+      visit "/admin/users"
       within "#user-#{@user_1.id}" do
         expect(page).to have_content(@user_1.name)
         expect(@user_1.active).to eq(true)
@@ -33,11 +33,11 @@ RSpec.describe "As an admin user", type: :feature do
     end
     it "When I click on the button it will update user status and redirect badck to user index page" do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin_user)
-      visit admin_dash_users_path
+      visit "/admin/users"
       within "#user-#{@user_1.id}" do
         click_on "Deactivate User"
         @user_1.reload
-        expect(current_path).to eq(admin_dash_users_path)
+        expect(current_path).to eq("/admin/users")
         expect(page).to have_link("Activate User")
         expect(@user_1.active).to eq(false)
         click_on "Activate User"
@@ -58,7 +58,7 @@ RSpec.describe "As an admin user", type: :feature do
     end
     it "I see a flash message that account status is updated" do
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin_user)
-      visit admin_dash_users_path
+      visit "/admin/users"
       within "#user-#{@user_1.id}" do
         click_on "Deactivate User"
         @user_1.reload

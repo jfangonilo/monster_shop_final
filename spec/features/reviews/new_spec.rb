@@ -53,7 +53,6 @@ RSpec.describe 'review creation', type: :feature do
 
         fill_in "Title", with: title
         fill_in "Rating", with: rating
-
         click_on "Create Review"
 
         expect(page).to have_content("Please fill in all fields in order to create a review.")

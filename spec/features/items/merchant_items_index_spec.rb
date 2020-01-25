@@ -11,7 +11,7 @@ RSpec.describe "Merchant Items Index Page" do
 
     it 'shows me a list of that merchants items' do
       visit "merchants/#{@meg.id}/items"
-
+save_and_open_page
       within "#item-#{@tire.id}" do
         expect(page).to have_content(@tire.name)
         expect(page).to have_content(number_to_currency(@tire.price/100.to_f))

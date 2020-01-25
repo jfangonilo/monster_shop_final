@@ -9,9 +9,9 @@ RSpec.describe "As a merchant", type: :feature do
     end
 
     it "can click on that link to add a new item" do
-        visit merchant_dash_items_path
+        visit "/merchant/items"
         click_on "Add New Item"
-        expect(current_path).to eq(new_merchant_dash_item_path)
+        expect(current_path).to eq("/merchant/items/new")
 
         name = "Chamois Buttr"
         price = 18
@@ -29,7 +29,7 @@ RSpec.describe "As a merchant", type: :feature do
 
         new_item = Item.last
 
-        expect(current_path).to eq(merchant_dash_items_path)
+        expect(current_path).to eq("/merchant/items")
         expect(new_item.name).to eq(name)
         expect(Item.last.active?).to be(true)
         expect(page).to have_content(name)
@@ -37,9 +37,9 @@ RSpec.describe "As a merchant", type: :feature do
     end
 
     it "will have all item details and only image can be blank" do
-      visit merchant_dash_items_path
+      visit "/merchant/items"
       click_on "Add New Item"
-      expect(current_path).to eq(new_merchant_dash_item_path)
+      expect(current_path).to eq("/merchant/items/new")
 
       name = "Chamois Buttr"
       price = 18
@@ -55,16 +55,16 @@ RSpec.describe "As a merchant", type: :feature do
 
       new_item = Item.last
 
-      expect(current_path).to eq(merchant_dash_items_path)
+      expect(current_path).to eq("/merchant/items")
       expect(new_item.name).to eq(name)
       expect(Item.last.active?).to be(true)
       expect(page).to have_content(name)
       expect(page).to have_css("img[src*='#{new_item.image}']")
     end
     it "will have a price greater than 0 and quantity 0 or greater" do
-      visit merchant_dash_items_path
+      visit "/merchant/items"
       click_on "Add New Item"
-      expect(current_path).to eq(new_merchant_dash_item_path)
+      expect(current_path).to eq("/merchant/items/new")
 
       name = "Chamois Buttr"
       price = 0

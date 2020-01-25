@@ -17,7 +17,7 @@ class Admin::ItemsController < Admin::BaseController
     @merchant = Merchant.find(params[:merchant_id])
     @item = @merchant.items.create(item_params)
     if @item.save
-      redirect_to admin_dash_merchant_items_path(@merchant)
+      redirect_to "/admin/merchants/#{@merchant.id}/items"
     else
       generate_error(@item)
       render :new
@@ -26,12 +26,12 @@ class Admin::ItemsController < Admin::BaseController
 
   def edit
     @merchant = Merchant.find(params[:merchant_id])
-    @item = @merchant.items.find(params[:id])
+    @item = @merchant.items.find(params[:item_id])
   end
 
   def update
     @merchant = Merchant.find(params[:merchant_id])
-    @item = @merchant.items.find(params[:id])
+    @item = @merchant.items.find(params[:item_id])
     @item.update(item_params)
     if @item.save
       redirect_to "/items/#{@item.id}"
@@ -42,9 +42,9 @@ class Admin::ItemsController < Admin::BaseController
   end
 
   def toggle_active
-    item = Item.find(params[:item_id])
+    item = Item.find(params[:id])
     item.toggle!(:active?)
-    redirect_to admin_dash_merchant_items_path(item.merchant)
+    redirect_to "/admin/merchants/#{item.merchant.id}/items"
     if item.active?
       flash[:success] = "#{item.name} is now avalible for sale."
     else

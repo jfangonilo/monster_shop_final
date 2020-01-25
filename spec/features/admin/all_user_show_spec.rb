@@ -10,7 +10,7 @@ RSpec.describe "admin all user show page" do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
     visit "/admin/users"
-    
+
     expect(page).to have_content(ray.name)
     expect(page).to have_content(ray.role)
     expect(page).to have_content(ray.created_at)
@@ -32,7 +32,7 @@ RSpec.describe "admin all user show page" do
     expect(current_path).to eq("/admin/users/#{ray.id}")
   end
 
-  it "can edit all user in the system" do 
+  it "can edit all user in the system" do
     user = create(:admin_user)
     ray = create(:regular_user, name: "Ray Win")
     jomah = create(:regular_user, email: "rad@gmail.com")
@@ -45,7 +45,7 @@ RSpec.describe "admin all user show page" do
 
     expect(page).to have_link("Edit #{ray.name} information.")
     expect(page).to have_link("Edit #{ray.name} password.")
-    
+
     click_on "Edit #{ray.name} information."
 
     expect(current_path).to eq("/admin/users/#{ray.id}/edit")
@@ -68,7 +68,7 @@ RSpec.describe "admin all user show page" do
     ray.reload
     expect(current_path).to eq("/admin/users/#{ray.id}")
     expect(page).to have_content("Password has been updated.")
-  end 
+  end
 
   it "can not change password if doesnt match" do
     user = create(:admin_user)
@@ -101,7 +101,7 @@ RSpec.describe "admin all user show page" do
 
     expect(page).to have_link("Edit #{ray.name} information.")
     expect(page).to have_link("Edit #{ray.name} password.")
-    
+
     click_on "Edit #{ray.name} information."
 
     expect(current_path).to eq("/admin/users/#{ray.id}/edit")
@@ -110,7 +110,7 @@ RSpec.describe "admin all user show page" do
     fill_in :address, with: ""
 
     click_button "Submit"
-    expect(current_path).to eq("/admin/users/#{ray.id}")
+    expect(current_path).to eq("/admin/users/#{ray.id}/edit")
     expect(page).to have_content("Address can't be blank")
   end
 end

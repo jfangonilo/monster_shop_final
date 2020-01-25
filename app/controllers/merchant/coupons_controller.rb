@@ -14,7 +14,7 @@ class Merchant::CouponsController < Merchant::BaseController
     @coupon = merchant.coupons.create(coupon_params)
     if @coupon.save
       flash[:success] = "New Coupon Created"
-      redirect_to merchant_dash_coupons_path
+      redirect_to "/merchant/coupons"
     else
       generate_error(@coupon)
       render :new
@@ -32,7 +32,7 @@ class Merchant::CouponsController < Merchant::BaseController
     @coupon.update(coupon_params)
     if @coupon.save
       flash[:success] = "Coupon Updated"
-      redirect_to merchant_dash_coupon_path(@coupon)
+      redirect_to "/merchant/coupons/#{@coupon.id}"
     else
       generate_error(@coupon)
       render :edit
@@ -49,7 +49,7 @@ class Merchant::CouponsController < Merchant::BaseController
     @coupon = merchant.coupons.find(params[:id])
     @coupon.destroy
     flash[:success] = "Coupon Deleted"
-    redirect_to merchant_dash_coupons_path
+    redirect_to "/merchant/coupons"
   end
 
 private

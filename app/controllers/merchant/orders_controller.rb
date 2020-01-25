@@ -11,6 +11,6 @@ class Merchant::OrdersController < Merchant::BaseController
     item_order = order.item_orders.find(params[:item_order_id])
     item_order.fulfill
     order.package_if_fulfilled
-    redirect_to merchant_dash_order_path(order)
+    redirect_to "/merchant/orders/#{order.id}"
   end
 end

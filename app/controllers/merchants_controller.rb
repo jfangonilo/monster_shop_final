@@ -29,7 +29,7 @@ class MerchantsController <ApplicationController
   def update
     @merchant = Merchant.find(params[:id])
     if @merchant.update(merchant_params)
-      redirect_to merchant_path(@merchant)
+      redirect_to "/merchants/#{@merchant.id}"
     else
       generate_error(@merchant)
       render :edit

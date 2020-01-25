@@ -13,11 +13,11 @@ class Admin::MerchantsController < ApplicationController
     if merchant.active?
       merchant.items.update_all(active?: true)
       flash[:notice] = "Merchant has been deactivated"
-      redirect_to admin_dash_merchants_path
+      redirect_to "/admin/merchants"
     else
       merchant.items.update_all(active?: false)
       flash[:notice] = "Merchant has been activated"
-      redirect_to admin_dash_merchants_path
+      redirect_to "/admin/merchants"
     end
   end
 end

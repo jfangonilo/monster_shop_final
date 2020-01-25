@@ -17,24 +17,24 @@ class Admin::UsersController < Admin::BaseController
       password_update
     elsif @display_user.update(user_params)
       flash[:success] = "Your profile has been updated."
-      redirect_to admin_dash_user_path(@display_user)
+      redirect_to "/admin/users/#{@display_user.id}"
     else
       generate_error(@display_user)
-      redirect_to admin_dash_user_path(@display_user)
+      redirect_to "/admin/users/#{@display_user.id}/edit"
     end
   end
 
   def update_role
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
     @user.update(user_role_params)
     flash[:success] = "The user role has been updated to #{@user.role}."
-    redirect_to admin_dash_users_path
+    redirect_to "/admin/users"
   end
 
   def toggle_active
-    user = User.find(params[:user_id])
+    user = User.find(params[:id])
     user.toggle!(:active)
-    redirect_to admin_dash_users_path
+    redirect_to "/admin/users"
     if user.active?
       flash[:success] = "#{user.name} has been enabled."
     else
@@ -43,7 +43,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def edit_password
-    @display_user = User.find(params[:user_id])
+    @display_user = User.find(params[:id])
   end
 
 private
@@ -60,10 +60,10 @@ private
     if params[:password] == params[:password_confirmation]
       @display_user.update(user_params)
       flash[:success] = "Password has been updated."
-      redirect_to admin_dash_user_path(@display_user)
+      redirect_to "/admin/users/#{@display_user.id}"
     else
       flash[:error] = "Passwords entered do not match."
-      redirect_to admin_dash_user_edit_password_path(@display_user)
+      redirect_to "/admin/users/#{@display_user.id}/edit_password"
     end
   end
 end

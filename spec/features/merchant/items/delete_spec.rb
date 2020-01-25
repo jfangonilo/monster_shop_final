@@ -16,25 +16,25 @@ RSpec.describe 'merchant item delete', type: :feature do
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant_employee)
 
-      visit merchant_dash_items_path
+      visit "/merchant/items"
 
         within "#item-#{chain.id}" do
           expect(page).to have_content(chain.name)
           expect(page).to have_link("Delete Item")
           click_on "Delete Item"
-          expect(current_path).to eq(merchant_dash_items_path)
+          expect(current_path).to eq("/merchant/items")
         end
         within "#item-#{roof_rack.id}" do
           expect(page).to have_content(roof_rack.name)
           expect(page).to have_link("Delete Item")
           click_on "Delete Item"
-          expect(current_path).to eq(merchant_dash_items_path)
+          expect(current_path).to eq("/merchant/items")
         end
         within "#item-#{boots.id}" do
           expect(page).to have_content(boots.name)
           expect(page).to have_link("Delete Item")
           click_on "Delete Item"
-          expect(current_path).to eq(merchant_dash_items_path)
+          expect(current_path).to eq("/merchant/items")
         end
 
       expect(page).to_not have_content(chain.name)
@@ -54,7 +54,7 @@ RSpec.describe 'merchant item delete', type: :feature do
       chain = create(:random_item, name: "chain", merchant: merchant)
       review_1 = chain.reviews.create(title: "Great place!", content: "They have great bike stuff and I'd recommend them to anyone.", rating: 5)
 
-      visit merchant_dash_items_path
+      visit "/merchant/items"
 
       click_on "Delete Item"
       expect(Review.where(id:review_1.id)).to be_empty
@@ -71,7 +71,7 @@ RSpec.describe 'merchant item delete', type: :feature do
       order_1 = user.orders.create!(name: 'Meg', address: '123 Stang St', city: 'Hershey', state: 'PA', zip: 80218)
       order_1.item_orders.create!(item: chain, price: chain.price, quantity: 2)
 
-      visit merchant_dash_items_path
+      visit "/merchant/items"
 
       within "#item-#{chain.id}" do
         expect(page).to_not have_link("Delete Item")
